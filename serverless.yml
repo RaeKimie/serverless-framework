@@ -74,14 +74,14 @@ package:
 #    - include-me-dir/**
 
 functions:
-  cronTest: 
-    handler: handler.cronTest #function name here
+  cronJobTest: 
+    handler: handler.cronJobTest #function name here
     events:
       - schedule: rate(1 minute) # run every 1 minute
       #sls deploy -s dev => deploy functions
       #sls logs -f functionNameHere -s dev -t  (logs cron job in terminal)
-  hello:
-    handler: handler.hello
+  endpointTest:
+    handler: handler.endpointTest
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

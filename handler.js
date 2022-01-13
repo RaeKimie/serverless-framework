@@ -1,6 +1,6 @@
 'use strict';
-const { saveToDB } = require('./utils')
-module.exports.hello = async (event) => {
+const { saveToDB } = require('./utils/saveToDB')
+module.exports.endpointTest = async (event) => {
   const passedParam = event.pathParameters.param;
   saveToDB(passedParam);
   return {
@@ -19,7 +19,7 @@ module.exports.hello = async (event) => {
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
 
-module.exports.cronTest = async (event) => {
+module.exports.cronJobTest = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(

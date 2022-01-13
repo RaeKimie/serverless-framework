@@ -3,7 +3,20 @@ const AWS = require("aws-sdk");
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
-module.exports = (param) => {
+module.exports.saveToDB = (param) => {
+    const params = this.createParams(param);
+
+    dynamoDB.put(params, error => {
+        if (error) {
+            console.log(`Error saving data to DynamoDB ${JSON.stringify(error)}`)
+            return Promise.reject(`Error saving data to DynamoDB ${JSON.stringify(error)}`)
+        } else {
+            return Promise.resolve(params.Item)
+        }
+    })
+}
+
+module.exports.createParams = (param) => {
     const date = JSON.stringify(new Date());
     const params = {
         TableName: process.env.DYNAMODB_TABLE,
@@ -14,13 +27,5 @@ module.exports = (param) => {
             createdAt: date
         }
     }
-
-    dynamoDB.put(params, error => {
-        if (error) {
-            console.log(`Error saving data to DynamoDB ${JSON.stringify(error)}`)
-            return Promise.reject(`Error saving data to DynamoDB ${JSON.stringify(error)}`)
-        } else {
-            return Promise.resolve(params.Item)
-        }
-    })
+    return params;
 }
