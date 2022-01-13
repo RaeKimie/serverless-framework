@@ -13,7 +13,7 @@
 
 service: first-Lambda
 plugins:
-    - serverless-offline
+    - serverless-offline #need to specify here to use serverless-offline
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -28,7 +28,21 @@ provider:
   lambdaHashingVersion: 20201221
   stage: dev
   region: eu-west-2
-
+  environment:
+    DYNAMODB_TABLE: sls-test
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+package:
+  include:
+    - utils/**
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
 #    role:
@@ -60,10 +74,12 @@ provider:
 #    - include-me-dir/**
 
 functions:
-  cronTest:
-    handler: handler.cronTest
+  cronTest: 
+    handler: handler.cronTest #function name here
     events:
-
+      - schedule: rate(1 minute) # run every 1 minute
+      #sls deploy -s dev => deploy functions
+      #sls logs -f functionNameHere -s dev -t  (logs cron job in terminal)
   hello:
     handler: handler.hello
 #    The following are a few example events you can configure
@@ -71,9 +87,10 @@ functions:
 #    Check the event documentation for details
     events:
       - httpApi:
-          path: /test/{param}
+          path: /test/{param} #endpoint
           method: get
-      - schedule: rate(1 minute)
+          #sls invoke local -f functionName
+          #run serverless offline to test
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
