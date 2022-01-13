@@ -3,7 +3,7 @@ name: my-aws-expenses-app
 on:
   push:
     branches:
-      - ["develop", "test"]
+      - "develop"
 
 jobs:
   unit-test:
