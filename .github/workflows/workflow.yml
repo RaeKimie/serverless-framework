@@ -1,4 +1,4 @@
-name: my-aws-expenses-app
+name: serverless-framework
 
 on:
   push:
